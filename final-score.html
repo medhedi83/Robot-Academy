@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Score</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #e6f2ff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .topbar {
+      width: 100%;
+      background: #003366;
+      color: white;
+      padding: 18px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 480px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    #robot {
+      width: 240px;
+      margin-top: 10px;
+    }
+
+    #trophy {
+      width: 120px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    h2 {
+      color: #003366;
+    }
+
+    #scoreText {
+      font-size: 24px;
+      font-weight: bold;
+      color: #003366;
+      margin-top: 10px;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 15px 25px;
+      background: #00b7ff;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .btn:hover {
+      background: #0099d6;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      width: 90%;
+      max-width: 480px;
+      margin: 20px auto;
+      background: #d0e4ff;
+      border-radius: 10px;
+      height: 14px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 100%;
+      background: #00b7ff;
+      border-radius: 10px;
+    }
+  </style>
+
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="topbar">Final Score</div>
+
+  <!-- Progress bar -->
+  <div class="progress-container">
+    <div class="progress-fill"></div>
+  </div>
+
+  <div class="card">
+    <img id="robot" src="" alt="Robot">
+    <img id="robot" src="assets/robot/trophy.png" alt="Trophy">
+
+    <h2 id="message"></h2>
+    <div id="scoreText"></div>
+
+    <button class="btn" onclick="goHome()">🏠 Home</button>
+    <button class="btn" onclick="playAgain()">🔄 Play Again</button>
+  </div>
+
+  <!-- Sound effects -->
+  <audio id="sound-victory" src="sounds/victory.mp3"></audio>
+  <audio id="sound-sad" src="sounds/sad.mp3"></audio>
+
+  <script>
+    let totalCorrect = 0;
+    let totalQuestions = 0;
+
+    for (let level = 1; level <= 5; level++) {
+      const c = parseInt(localStorage.getItem("score_L" + level) || "0");
+      const t = parseInt(localStorage.getItem("total_L" + level) || "0");
+      totalCorrect += c;
+      totalQuestions += t;
+    }
+
+    const percent = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+
+    const robot = document.getElementById("robot");
+    const trophy = document.getElementById("trophy");
+    const message = document.getElementById("message");
+    const scoreText = document.getElementById("scoreText");
+
+    scoreText.textContent = `Final score: ${percent}%`;
+
+    const victorySound = document.getElementById("sound-victory");
+    const sadSound = document.getElementById("sound-sad");
+
+    if (percent >= 90) {
+      robot.src = "assets/robot/robot-victory.png";
+      trophy.style.display = "block";
+      message.textContent = "Amazing! You earned a trophy!";
+      victorySound.play();
+
+      // Confetti burst
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+    } else if (percent >= 80) {
+      robot.src = "assets/robot/robot-victory.png";
+      message.textContent = "Great job!";
+      victorySound.play();
+
+    } else {
+      robot.src = "assets/robot/robot-sad.png";
+      message.textContent = "Keep practicing!";
+      sadSound.play();
+    }
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+
+    function playAgain() {
+      window.location.href = "level1.html";
+    }
+  </script>
+
+</body>
+</html>

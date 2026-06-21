@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Level 3 – Robots & Sensors</title>
+
+  <style>
+    body { margin:0; padding:0; background:#e6f2ff; font-family:Arial; }
+    .topbar { width:100%; background:#003366; color:white; padding:18px; font-size:26px; text-align:center; font-weight:bold; }
+    .card { width:90%; max-width:480px; margin:40px auto; background:white; padding:25px; border-radius:18px; box-shadow:0 6px 18px rgba(0,0,0,0.15); text-align:center; }
+    #feedback { height:110px; margin-bottom:10px; }
+    #robot { width:220px; margin-bottom:10px; }
+    #scoreDisplay { font-size:18px; color:#003366; margin-bottom:10px; font-weight:bold; }
+    .bluebox { background:#eaf3ff; padding:18px; border-radius:12px; margin-top:10px; font-size:20px; color:#003366; font-weight:bold; }
+    .btn { margin:12px; padding:15px 20px; border-radius:12px; font-size:20px; cursor:pointer; transition:0.2s; display:block; width:100%; max-width:320px; margin-left:auto; margin-right:auto; color:white; border:none; font-weight:bold; }
+    .btn-blue { background:#00b7ff; } .btn-blue:hover { background:#0099d6; }
+    .btn-dark { background:#003366; } .btn-dark:hover { background:#00264d; }
+    #progress { margin-top:10px; font-size:16px; color:#003366; }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">Level 3 – Robots & Sensors</div>
+
+  <div class="card">
+
+    <img id="feedback" src="" alt="">
+    <img id="robot" src="assets/robot/robot-welcome.png" alt="Robot">
+
+    <div id="scoreDisplay">Score: 0 / 8</div>
+
+    <div id="instruction">Choose the CORRECT answer:</div>
+
+    <div id="questionBox" class="bluebox">Question text</div>
+
+    <button id="btnA" class="btn btn-blue" onclick="answer('A')"></button>
+    <button id="btnB" class="btn btn-dark" onclick="answer('B')"></button>
+
+    <div id="progress"></div>
+
+  </div>
+
+  <script>
+    const robot = document.getElementById("robot");
+    const feedback = document.getElementById("feedback");
+    const questionBox = document.getElementById("questionBox");
+    const btnA = document.getElementById("btnA");
+    const btnB = document.getElementById("btnB");
+    const progress = document.getElementById("progress");
+    const scoreDisplay = document.getElementById("scoreDisplay");
+
+    // ⭐ SOUND FILES
+    const sCorrect = new Audio("sounds/correct.mp3");
+    const sWrong = new Audio("sounds/wrong.mp3");
+    const sVictory = new Audio("sounds/victory.mp3");
+    const sSad = new Audio("sounds/sad.mp3");
+
+    let questions = [
+      { q: "Which sensor helps a robot see?", correct: "Camera", wrong: "Spoon" },
+      { q: "Which sensor detects distance?", correct: "Ultrasonic sensor", wrong: "Pillow" },
+      { q: "Which sensor detects heat?", correct: "Infrared sensor", wrong: "Banana" },
+      { q: "Which part is the robot's 'brain'?", correct: "Processor", wrong: "Shoe" },
+      { q: "Which sensor helps robots avoid obstacles?", correct: "Lidar", wrong: "Book" },
+      { q: "Which sensor detects touch?", correct: "Pressure sensor", wrong: "Feather" },
+      { q: "Which sensor detects sound?", correct: "Microphone", wrong: "Rock" },
+      { q: "Which sensor detects movement?", correct: "Motion sensor", wrong: "Cup" }
+    ];
+
+    questions = questions.sort(() => Math.random() - 0.5);
+
+    let current = 0;
+    let correctAnswers = 0;
+    const totalQuestions = questions.length;
+    let isLeftCorrect = true;
+
+    function updateScore() {
+      scoreDisplay.textContent = `Score: ${correctAnswers} / ${totalQuestions}`;
+    }
+
+    function loadQuestion() {
+      const q = questions[current];
+      questionBox.textContent = q.q;
+
+      isLeftCorrect = Math.random() < 0.5;
+
+      if (isLeftCorrect) {
+        btnA.textContent = q.correct;
+        btnB.textContent = q.wrong;
+      } else {
+        btnA.textContent = q.wrong;
+        btnB.textContent = q.correct;
+      }
+
+      const swapColors = Math.random() < 0.5;
+      btnA.className = swapColors ? "btn btn-blue" : "btn btn-dark";
+      btnB.className = swapColors ? "btn btn-dark" : "btn btn-blue";
+
+      feedback.src = "";
+      robot.src = "assets/robot/robot-welcome.png";
+      progress.textContent = `Question ${current + 1} of ${totalQuestions}`;
+      updateScore();
+    }
+
+    function answer(side) {
+      const pickedLeft = side === "A";
+      const isCorrect = (pickedLeft && isLeftCorrect) || (!pickedLeft && !isLeftCorrect);
+
+      if (isCorrect) {
+        correctAnswers++;
+        robot.src = "assets/robot/robot-victory.png";
+        feedback.src = "assets/robot/robot-check.png";
+        sCorrect.currentTime = 0; sCorrect.play();
+      } else {
+        robot.src = "assets/robot/robot-sad.png";
+        feedback.src = "assets/robot/robot-x.png";
+        sWrong.currentTime = 0; sWrong.play();
+      }
+
+      updateScore();
+
+      setTimeout(() => {
+        current++;
+        if (current >= totalQuestions) {
+          sVictory.currentTime = 0; sVictory.play();
+          localStorage.setItem("score_L3", correctAnswers);
+          localStorage.setItem("total_L3", totalQuestions);
+          window.location.href = "transition.html?level=3";
+        } else {
+          loadQuestion();
+        }
+      }, 1200);
+    }
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>

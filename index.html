@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Learning Game</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #e6f2ff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .topbar {
+      width: 100%;
+      background: #003366;
+      color: white;
+      padding: 18px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 480px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    #robot {
+      width: 240px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 22px;
+      cursor: pointer;
+      background: #00b7ff;
+      color: white;
+      border: none;
+      font-weight: bold;
+      width: 80%;
+      max-width: 300px;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background: #0099d6;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">AI Learning Game</div>
+
+  <div class="card">
+    <img id="robot" src="assets/robot/robot-welcome.png" alt="Robot">
+    <h2>Welcome!</h2>
+    <p>Learn AI and Robots through fun levels.</p>
+
+    <button class="btn" onclick="startGame()">Start Game</button>
+  </div>
+
+  <script>
+    function startGame() {
+      window.location.href = "level1.html";
+    }
+  </script>
+
+</body>
+</html>

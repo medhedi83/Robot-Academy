@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level Complete</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #e6f2ff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .topbar {
+      width: 100%;
+      background: #003366;
+      color: white;
+      padding: 18px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 480px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    #trophy {
+      width: 100px;
+      position: absolute;
+      left: 20px;
+      top: 40px;
+    }
+
+    #robot {
+      width: 200px;
+      margin-left: 60px;
+    }
+
+    #message {
+      font-size: 22px;
+      color: #003366;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    #scoreText {
+      font-size: 18px;
+      color: #003366;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">Level Complete!</div>
+
+  <div class="card">
+    <img id="trophy" src="assets/robot/trophy.png" alt="Trophy">
+    <img id="robot" src="assets/robot/robot-victory.png" alt="Robot">
+    <h2 id="message">Great job!</h2>
+    <p id="scoreText"></p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const level = parseInt(params.get("level"));
+    const score = localStorage.getItem(`score_L${level}`);
+    const total = localStorage.getItem(`total_L${level}`);
+
+    document.getElementById("scoreText").textContent = `You scored ${score} out of ${total}!`;
+
+    // ⭐ Auto-transition after 2 seconds
+    setTimeout(() => {
+      if (level === 5) {
+        window.location.href = "final-score.html";
+      } else {
+        window.location.href = `level${level + 1}.html`;
+      }
+    }, 2000);
+  </script>
+
+</body>
+</html>
