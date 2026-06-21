@@ -21,7 +21,6 @@
             padding: 20px;
         }
 
-        /* Robot + Trophy side-by-side */
         .result-header {
             display: flex;
             justify-content: center;
@@ -37,6 +36,11 @@
             flex-wrap: wrap;
         }
 
+        .result-trophy {
+            width: 160px;
+            animation: bounce 1.2s infinite ease-in-out;
+        }
+
         .result-robot {
             width: 200px;
             animation: bounce 1.2s infinite ease-in-out;
@@ -46,16 +50,6 @@
             0% { transform: translateY(0); }
             50% { transform: translateY(-12px); }
             100% { transform: translateY(0); }
-        }
-
-        .result-trophy {
-            width: 160px;
-            animation: glow 1.5s infinite alternate;
-        }
-
-        @keyframes glow {
-            from { filter: drop-shadow(0 0 2px gold); }
-            to { filter: drop-shadow(0 0 12px gold); }
         }
 
         h1 {
@@ -100,23 +94,6 @@
         .btn:hover {
             background: #005fcc;
         }
-
-        /* Confetti */
-        .confetti {
-            position: fixed;
-            top: -10px;
-            width: 10px;
-            height: 10px;
-            background: red;
-            opacity: 0.8;
-            animation: fall 3s linear infinite;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(120vh) rotate(360deg);
-            }
-        }
     </style>
 </head>
 
@@ -126,8 +103,8 @@
 
         <div class="result-header">
             <div class="result-images">
-                <img src="assets/robot/robot-victory.png" class="result-robot" alt="Robot">
                 <img src="assets/robot/trophy.png" class="result-trophy" alt="Trophy">
+                <img src="assets/robot/robot-victory.png" class="result-robot" alt="Robot">
             </div>
         </div>
 
@@ -142,34 +119,15 @@
 
     </div>
 
-    <!-- Celebration sound -->
     <audio id="celebrateSound" src="sounds/victory.mp3"></audio>
 
     <script>
-        // Load score
         const score = localStorage.getItem("finalScore") || 0;
         document.getElementById("finalScoreText").textContent = `Final score: ${score}%`;
 
-        // Play sound
         const sound = document.getElementById("celebrateSound");
         sound.volume = 0.5;
         sound.play();
-
-        // Confetti generator
-        function createConfetti() {
-            const confetti = document.createElement("div");
-            confetti.classList.add("confetti");
-
-            confetti.style.left = Math.random() * 100 + "vw";
-            confetti.style.backgroundColor = ["red","blue","yellow","green","purple","orange"][Math.floor(Math.random()*6)];
-            confetti.style.animationDuration = (2 + Math.random() * 2) + "s";
-
-            document.body.appendChild(confetti);
-
-            setTimeout(() => confetti.remove(), 4000);
-        }
-
-        setInterval(createConfetti, 150);
     </script>
 
 </body>
